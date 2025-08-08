@@ -1,5 +1,7 @@
 import CartButton from '@/components/CartButton';
+import Filter from '@/components/Filter';
 import MenuCard from '@/components/MenuCard';
+import SearchBar from '@/components/SearchBar';
 import { getCategories, getMenu } from '@/lib/appwrite';
 import useAppwrite from '@/lib/useAppwrite';
 import { MenuItem } from '@/type';
@@ -10,7 +12,7 @@ import { FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Search = () => {
-  const { category, query } = useLocalSearchParams<{ query: string; category: string }>()
+  const { category, query } = useLocalSearchParams<{query: string; category: string}>()
 
   const { data, refetch, loading } = useAppwrite({ fn: getMenu, params: { category, query, limit: 6 } })
   const { data: categories } = useAppwrite({ fn: getCategories });
@@ -48,9 +50,10 @@ const Search = () => {
               <CartButton/>
             </View>
 
-            <Text>Search Input</Text>
+            <SearchBar/>
 
-            <Text>Filter</Text>
+            <Filter categories={categories!} />
+
           </View>
         )}
 
