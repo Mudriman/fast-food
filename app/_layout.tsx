@@ -1,19 +1,20 @@
-import useAuthStore from '@/store/auth.store';
-import * as Sentry from '@sentry/react-native';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
-import "./global.css";
+import { SplashScreen, Stack } from "expo-router";
+import { useEffect } from "react";
+
+import useAuthStore from "@/store/auth.store";
+import * as Sentry from '@sentry/react-native';
+import './global.css';
 
 Sentry.init({
-  dsn: 'https://b1ba0d8fc89c8f54b16e0405f814b96e@o4509796504043520.ingest.us.sentry.io/4509801652748288',
+  dsn: 'https://94edd17ee98a307f2d85d750574c454a@o4506876178464768.ingest.us.sentry.io/4509588544094208',
 
   // Adds more context data to events (IP address, cookies, user, etc.)
   // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
   sendDefaultPii: true,
 
   // Configure Session Replay
-  replaysSessionSampleRate: 0.1,
+  replaysSessionSampleRate: 1,
   replaysOnErrorSampleRate: 1,
   integrations: [Sentry.mobileReplayIntegration(), Sentry.feedbackIntegration()],
 
@@ -22,7 +23,7 @@ Sentry.init({
 });
 
 export default Sentry.wrap(function RootLayout() {
-  const { isLoading, fetchAuthenticatedUser} = useAuthStore();
+  const { isLoading, fetchAuthenticatedUser } = useAuthStore();
 
   const [fontsLoaded, error] = useFonts({
     "QuickSand-Bold": require('../assets/fonts/Quicksand-Bold.ttf'),
@@ -35,15 +36,15 @@ export default Sentry.wrap(function RootLayout() {
   useEffect(() => {
     if(error) throw error;
     if(fontsLoaded) SplashScreen.hideAsync();
-  },[fontsLoaded, error]);
+  }, [fontsLoaded, error]);
 
   useEffect(() => {
     fetchAuthenticatedUser()
   }, []);
-  
+
   if(!fontsLoaded || isLoading) return null;
-  
-  return (
-      <Stack screenOptions={{headerShown: false}}/>
-  );
+
+  return <Stack screenOptions={{ headerShown: false }} />;
 });
+
+Sentry.showFeedbackWidget();
